@@ -1,0 +1,448 @@
+[
+	{
+		"name": "bt-connector",
+		"title": "Bt connector",
+		"description": "test desc",
+		"version": "1.0",
+		"tags": [
+			"service"
+		],
+		"icon": {
+			"type": "url",
+			"value": "//s3.amazonaws.com/images.tray.io/artisan/icons/bt-connector.png"
+		},
+		"messages": [
+			{
+				"name": "create_question",
+				"description": "Create a new question",
+				"type": "public",
+				"input_schema": {
+					"type": "object",
+					"properties": {
+						"questionTitle": {
+							"type": "string",
+							"description": "The name of the question you would like to ask",
+							"title": "Question title"
+						},
+						"questionChoices": {
+							"type": "string",
+							"description": "List of Choices to select from",
+							"title": "Question choices"
+						}
+					},
+					"required": [
+						"questionTitle",
+						"questionChoices"
+					],
+					"advanced": [],
+					"$schema": "http://json-schema.org/draft-04/schema#",
+					"additionalProperties": false
+				},
+				"output_schema": {
+					"$schema": "http://json-schema.org/draft-04/schema#",
+					"type": "object",
+					"properties": {}
+				},
+				"title": "Create question",
+				"dynamic_output": false
+			},
+			{
+				"title": "List favorite programming languages DDL",
+				"name": "list_favorite_programming_languages_ddl",
+				"type": "ddl",
+				"input_schema": {
+					"type": "object",
+					"properties": {},
+					"required": [],
+					"advanced": [],
+					"$schema": "http://json-schema.org/draft-04/schema#",
+					"additionalProperties": false
+				}
+			},
+			{
+				"name": "list_questions",
+				"description": "",
+				"type": "public",
+				"input_schema": {
+					"type": "object",
+					"properties": {},
+					"required": [],
+					"advanced": [],
+					"$schema": "http://json-schema.org/draft-04/schema#",
+					"additionalProperties": false
+				},
+				"output_schema": {
+					"$schema": "http://json-schema.org/draft-04/schema#",
+					"type": "object",
+					"properties": {}
+				},
+				"title": "List questions",
+				"dynamic_output": false
+			},
+			{
+				"name": "raw_http_request",
+				"title": "Raw HTTP request (advanced)",
+				"description": "Perform a raw HTTP request with some pre-configuration and processing by the connector, such as authentication.",
+				"type": "public",
+				"input_schema": {
+					"type": "object",
+					"properties": {
+						"method": {
+							"type": "string",
+							"enum": [
+								"GET",
+								"POST",
+								"PATCH",
+								"PUT",
+								"DELETE",
+								"HEAD",
+								"OPTIONS"
+							],
+							"default": "GET",
+							"description": "The HTTP verb to perform the request with",
+							"title": "Method"
+						},
+						"url": {
+							"oneOf": [
+								{
+									"type": "object",
+									"properties": {
+										"endpoint": {
+											"type": "string",
+											"description": "The endpoint to call in relation to the base URL used by the connector. E.g: `/department/marketing/employees`.",
+											"title": "Endpoint"
+										}
+									},
+									"required": [
+										"endpoint"
+									],
+									"advanced": [],
+									"additionalProperties": false,
+									"title": "Endpoint"
+								},
+								{
+									"type": "object",
+									"properties": {
+										"full_url": {
+											"type": "string",
+											"description": "The full URL to make the request against. Must begin with `http://` or `https://`.",
+											"title": "Full URL"
+										}
+									},
+									"required": [
+										"full_url"
+									],
+									"advanced": [],
+									"additionalProperties": false,
+									"title": "Full URL"
+								}
+							],
+							"description": "The URL to make the request with.",
+							"title": "URL"
+						},
+						"headers": {
+							"type": "array",
+							"description": "Headers to be included in the request.",
+							"title": "Headers",
+							"items": {
+								"type": "object",
+								"properties": {
+									"key": {
+										"type": "string",
+										"description": "The header key.",
+										"title": "Key"
+									},
+									"value": {
+										"type": "string",
+										"description": "The header value.",
+										"title": "Value"
+									}
+								},
+								"required": [
+									"key",
+									"value"
+								],
+								"advanced": [],
+								"additionalProperties": false,
+								"title": "Header",
+								"description": "An individual header."
+							},
+							"additionalItems": true
+						},
+						"query_parameters": {
+							"type": "array",
+							"title": "Query Parameters",
+							"description": "Query parameters to be supplied with the request.",
+							"items": {
+								"type": "object",
+								"properties": {
+									"key": {
+										"type": "string",
+										"description": "The parameter key.",
+										"title": "Key"
+									},
+									"value": {
+										"type": "string",
+										"description": "The parameter value.",
+										"title": "Value"
+									}
+								},
+								"required": [
+									"key",
+									"value"
+								],
+								"advanced": [],
+								"additionalProperties": false,
+								"title": "Query Parameter",
+								"description": "An individual query parameter."
+							},
+							"additionalItems": true
+						},
+						"body": {
+							"title": "Body Type",
+							"oneOf": [
+								{
+									"type": "object",
+									"properties": {
+										"raw": {
+											"additionalProperties": true,
+											"type": [
+												"string",
+												"object"
+											],
+											"title": "raw",
+											"description": "Select either `string` to send the body as defined, or `object` to send the body as a JSON object.",
+											"format": "code"
+										}
+									},
+									"required": [
+										"raw"
+									],
+									"advanced": [],
+									"additionalProperties": false,
+									"title": "raw",
+									"description": "The raw body to perform the request with."
+								},
+								{
+									"type": "object",
+									"properties": {
+										"form_data": {
+											"type": "object",
+											"properties": {},
+											"required": [],
+											"advanced": [],
+											"additionalProperties": {
+												"oneOf": [
+													{
+														"type": "string",
+														"title": "Text",
+														"description": "A text value for the property in the form data body."
+													},
+													{
+														"type": "object",
+														"properties": {},
+														"required": [],
+														"advanced": [],
+														"additionalProperties": false,
+														"title": "File",
+														"description": "The tray file object to retrieve the contents of and set it as the value for the property in the form data body.",
+														"format": "file"
+													}
+												]
+											},
+											"title": "form-data",
+											"description": "The form data to perform the request with."
+										}
+									},
+									"required": [
+										"form_data"
+									],
+									"advanced": [],
+									"additionalProperties": false,
+									"title": "form-data",
+									"description": "The form data body to perform the request with."
+								},
+								{
+									"type": "object",
+									"properties": {
+										"form_urlencoded": {
+											"type": "object",
+											"properties": {},
+											"required": [],
+											"advanced": [],
+											"additionalProperties": {
+												"type": "string"
+											},
+											"title": "form-urlencoded",
+											"description": "The form url encoded data to perform the request with."
+										}
+									},
+									"required": [
+										"form_urlencoded"
+									],
+									"advanced": [],
+									"additionalProperties": false,
+									"title": "form-urlencoded",
+									"description": "The form urlencoded body to perform the request with."
+								},
+								{
+									"type": "object",
+									"properties": {
+										"binary": {
+											"type": "object",
+											"properties": {},
+											"required": [],
+											"advanced": [],
+											"additionalProperties": false,
+											"title": "binary",
+											"description": "The binary from a file to perform the request with.",
+											"format": "file"
+										}
+									},
+									"required": [
+										"binary"
+									],
+									"advanced": [],
+									"additionalProperties": false,
+									"title": "binary",
+									"description": "The file to set as the body to perform the request with."
+								},
+								{
+									"type": "object",
+									"properties": {
+										"none": {
+											"type": "null",
+											"description": "Send no body in the request.",
+											"title": "None"
+										}
+									},
+									"required": [
+										"none"
+									],
+									"advanced": [],
+									"additionalProperties": false,
+									"title": "none",
+									"description": "Select this option to not send a body in the request."
+								}
+							],
+							"description": "The body type of the request. Select `none` to not send a body."
+						},
+						"include_raw_body": {
+							"type": "boolean",
+							"default": false,
+							"description": "Include raw body in the operation's response",
+							"title": "Include raw body"
+						},
+						"parse_response": {
+							"type": "string",
+							"enum": [
+								{
+									"text": "All",
+									"description": "Automatically parse all content types if possible.",
+									"value": "true"
+								},
+								{
+									"text": "JSON only",
+									"description": "Only parse JSON content, leave other types as text.",
+									"value": "json"
+								},
+								{
+									"text": "XML only",
+									"description": "Only parse XML content, leave other types as text.",
+									"value": "xml"
+								},
+								{
+									"text": "None",
+									"description": "Always return text.",
+									"value": "false"
+								}
+							],
+							"default": "true",
+							"description": "Automatically parse incoming data to Javascript objects if possible",
+							"title": "Parse response"
+						}
+					},
+					"required": [
+						"method",
+						"url",
+						"body",
+						"include_raw_body",
+						"parse_response"
+					],
+					"advanced": [
+						"include_raw_body",
+						"parse_response"
+					],
+					"$schema": "http://json-schema.org/draft-04/schema#",
+					"additionalProperties": false
+				},
+				"output_schema": {
+					"type": "object",
+					"properties": {
+						"response": {
+							"type": "object",
+							"properties": {
+								"status_code": {
+									"type": "number",
+									"title": "Status code"
+								},
+								"headers": {
+									"type": "object",
+									"properties": {},
+									"required": [],
+									"advanced": [],
+									"additionalProperties": false,
+									"title": "Headers"
+								},
+								"body": {
+									"type": [
+										"string",
+										"number",
+										"object",
+										"array",
+										"boolean",
+										"null"
+									],
+									"title": "Body"
+								}
+							},
+							"required": [],
+							"advanced": [],
+							"additionalProperties": false,
+							"title": "Response"
+						}
+					},
+					"required": [],
+					"advanced": [],
+					"$schema": "http://json-schema.org/draft-04/schema#",
+					"additionalProperties": false
+				},
+				"dynamic_output": false
+			},
+			{
+				"name": "sample_operation",
+				"title": "Sample operation",
+				"description": "Just a sample operation.",
+				"type": "public",
+				"input_schema": {
+					"type": "object",
+					"properties": {},
+					"required": [],
+					"advanced": [],
+					"$schema": "http://json-schema.org/draft-04/schema#",
+					"additionalProperties": false
+				},
+				"output_schema": {
+					"$schema": "http://json-schema.org/draft-04/schema#",
+					"type": "object",
+					"properties": {
+						"result": {
+							"type": "string"
+						}
+					}
+				},
+				"dynamic_output": false
+			}
+		]
+	}
+]
